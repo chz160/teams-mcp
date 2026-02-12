@@ -23,9 +23,9 @@
 
 **Purpose**: Create the mode detection and scope selection helpers that all user stories depend on
 
-- [ ] T001 Add `isReadOnlyMode()` helper function that reads `TEAMS_MCP_READ_ONLY` env var and returns boolean (truthy values: `"true"`, `"1"`, `"yes"` case-insensitive) in `src/index.ts`
-- [ ] T002 Add `getDelegatedScopes(readOnly: boolean)` helper function that returns the full-access scope array when `false` and the read-only scope array (excluding `ChannelMessage.Send`, replacing `Chat.ReadWrite` with `Chat.Read`) when `true` in `src/index.ts`
-- [ ] T003 [P] Add `isReadOnlyMode()` and `getDelegatedScopes(readOnly: boolean)` helper functions with identical logic in `src/services/graph.ts`
+- [x] T001 Add `isReadOnlyMode()` helper function that reads `TEAMS_MCP_READ_ONLY` env var and returns boolean (truthy values: `"true"`, `"1"`, `"yes"` case-insensitive) in `src/index.ts`
+- [x] T002 Add `getDelegatedScopes(readOnly: boolean)` helper function that returns the full-access scope array when `false` and the read-only scope array (excluding `ChannelMessage.Send`, replacing `Chat.ReadWrite` with `Chat.Read`) when `true` in `src/index.ts`
+- [x] T003 [P] Add `isReadOnlyMode()` and `getDelegatedScopes(readOnly: boolean)` helper functions with identical logic in `src/services/graph.ts`
 
 **Checkpoint**: Helper functions available — user story implementation can now begin
 
@@ -39,20 +39,20 @@
 
 ### Implementation
 
-- [ ] T004 [P] [US1] Add optional `readOnly = false` parameter to `registerChatTools()` and wrap `send_chat_message` and `create_chat` registration in `if (!readOnly)` block in `src/tools/chats.ts`
-- [ ] T005 [P] [US1] Add optional `readOnly = false` parameter to `registerTeamsTools()` and wrap `send_channel_message` and `reply_to_channel_message` registration in `if (!readOnly)` block in `src/tools/teams.ts`
-- [ ] T006 [US1] Update `startMcpServer()` to call `isReadOnlyMode()`, store result, and pass `readOnly` to `registerAuthTools()`, `registerTeamsTools()`, and `registerChatTools()` in `src/index.ts`
-- [ ] T007 [US2] Replace static `DELEGATED_SCOPES` usage in `authenticate()` with `getDelegatedScopes(isReadOnlyMode())` in `src/index.ts`
-- [ ] T008 [US2] Replace static `DELEGATED_SCOPES` usage in `initializeClient()` and `acquireToken()` with `getDelegatedScopes(isReadOnlyMode())` in `src/services/graph.ts`
+- [x] T004 [P] [US1] Add optional `readOnly = false` parameter to `registerChatTools()` and wrap `send_chat_message` and `create_chat` registration in `if (!readOnly)` block in `src/tools/chats.ts`
+- [x] T005 [P] [US1] Add optional `readOnly = false` parameter to `registerTeamsTools()` and wrap `send_channel_message` and `reply_to_channel_message` registration in `if (!readOnly)` block in `src/tools/teams.ts`
+- [x] T006 [US1] Update `startMcpServer()` to call `isReadOnlyMode()`, store result, and pass `readOnly` to `registerAuthTools()`, `registerTeamsTools()`, and `registerChatTools()` in `src/index.ts`
+- [x] T007 [US2] Replace static `DELEGATED_SCOPES` usage in `authenticate()` with `getDelegatedScopes(isReadOnlyMode())` in `src/index.ts`
+- [x] T008 [US2] Replace static `DELEGATED_SCOPES` usage in `initializeClient()` and `acquireToken()` with `getDelegatedScopes(isReadOnlyMode())` in `src/services/graph.ts`
 
 ### Tests
 
-- [ ] T009 [P] [US1] Add test verifying `registerChatTools(server, graphService, true)` registers only 2 tools (`list_chats`, `get_chat_messages`) in `src/tools/__tests__/chats.test.ts`
-- [ ] T010 [P] [US1] Add test verifying `registerChatTools(server, graphService, false)` still registers all 4 tools (backward compatibility) in `src/tools/__tests__/chats.test.ts`
-- [ ] T011 [P] [US1] Add test verifying `registerTeamsTools(server, graphService, true)` registers only 6 read tools (excludes `send_channel_message`, `reply_to_channel_message`) in `src/tools/__tests__/teams.test.ts`
-- [ ] T012 [P] [US1] Add test verifying `registerTeamsTools(server, graphService, false)` still registers all 8 tools (backward compatibility) in `src/tools/__tests__/teams.test.ts`
-- [ ] T013 [P] [US2] Create `src/tools/__tests__/read-only-mode.test.ts` with tests for `isReadOnlyMode()`: returns `true` for `"true"`, `"1"`, `"yes"`, `"TRUE"`, `"Yes"`; returns `false` for `"false"`, `"0"`, `""`, `undefined`
-- [ ] T014 [P] [US2] Add tests for `getDelegatedScopes()`: verify full-access array includes `ChannelMessage.Send` and `Chat.ReadWrite`; verify read-only array excludes them and includes `Chat.Read` in `src/tools/__tests__/read-only-mode.test.ts`
+- [x] T009 [P] [US1] Add test verifying `registerChatTools(server, graphService, true)` registers only 2 tools (`list_chats`, `get_chat_messages`) in `src/tools/__tests__/chats.test.ts`
+- [x] T010 [P] [US1] Add test verifying `registerChatTools(server, graphService, false)` still registers all 4 tools (backward compatibility) in `src/tools/__tests__/chats.test.ts`
+- [x] T011 [P] [US1] Add test verifying `registerTeamsTools(server, graphService, true)` registers only 7 read tools (excludes `send_channel_message`, `reply_to_channel_message`) in `src/tools/__tests__/teams.test.ts`
+- [x] T012 [P] [US1] Add test verifying `registerTeamsTools(server, graphService, false)` still registers all 9 tools (backward compatibility) in `src/tools/__tests__/teams.test.ts`
+- [x] T013 [P] [US2] Create `src/tools/__tests__/read-only-mode.test.ts` with tests for `isReadOnlyMode()`: returns `true` for `"true"`, `"1"`, `"yes"`, `"TRUE"`, `"Yes"`; returns `false` for `"false"`, `"0"`, `""`, `undefined`
+- [x] T014 [P] [US2] Add tests for `getDelegatedScopes()`: verify full-access array includes `ChannelMessage.Send` and `Chat.ReadWrite`; verify read-only array excludes them and includes `Chat.Read` in `src/tools/__tests__/read-only-mode.test.ts`
 
 **Checkpoint**: Read-only mode fully functional. Server conditionally registers tools and requests correct scopes based on env var.
 
@@ -66,13 +66,13 @@
 
 ### Implementation
 
-- [ ] T015 [P] [US3] Add optional `readOnly = false` parameter to `registerAuthTools()` and append ` [Read-Only Mode]` to authenticated status message when `readOnly` is `true` in `src/tools/auth.ts`
-- [ ] T016 [US3] Add mode-aware startup log in `startMcpServer()`: log `"Microsoft Graph MCP Server started (read-only mode)"` when read-only, otherwise keep existing `"Microsoft Graph MCP Server started"` message in `src/index.ts`
+- [x] T015 [P] [US3] Add optional `readOnly = false` parameter to `registerAuthTools()` and append ` [Read-Only Mode]` to authenticated status message when `readOnly` is `true` in `src/tools/auth.ts`
+- [x] T016 [US3] Add mode-aware startup log in `startMcpServer()`: log `"Microsoft Graph MCP Server started (read-only mode)"` when read-only, otherwise keep existing `"Microsoft Graph MCP Server started"` message in `src/index.ts`
 
 ### Tests
 
-- [ ] T017 [P] [US3] Add test verifying `auth_status` response includes `[Read-Only Mode]` when `registerAuthTools(server, graphService, true)` in `src/tools/__tests__/auth.test.ts`
-- [ ] T018 [P] [US3] Add test verifying `auth_status` response does NOT include `[Read-Only Mode]` when `registerAuthTools(server, graphService, false)` (backward compatibility) in `src/tools/__tests__/auth.test.ts`
+- [x] T017 [P] [US3] Add test verifying `auth_status` response includes `[Read-Only Mode]` when `registerAuthTools(server, graphService, true)` in `src/tools/__tests__/auth.test.ts`
+- [x] T018 [P] [US3] Add test verifying `auth_status` response does NOT include `[Read-Only Mode]` when `registerAuthTools(server, graphService, false)` (backward compatibility) in `src/tools/__tests__/auth.test.ts`
 
 **Checkpoint**: All user stories independently functional. Mode is clearly communicated.
 
@@ -82,12 +82,12 @@
 
 **Purpose**: Validate everything works together, meets quality gates
 
-- [ ] T019 Run full test suite (`npm test`) and verify all existing tests pass unchanged
-- [ ] T020 Run coverage check (`npm run test:coverage`) and verify 80% threshold met
-- [ ] T021 Run linter (`npm run lint:fix`) and fix any issues
-- [ ] T022 Run TypeScript compilation (`npm run compile`) and verify zero type errors
-- [ ] T023 Run build (`npm run build`) and verify clean output
-- [ ] T024 Verify CLI smoke test: `node dist/index.js --help` runs without error
+- [x] T019 Run full test suite (`npm test`) and verify all existing tests pass unchanged
+- [x] T020 Run coverage check (`npm run test:coverage`) and verify 80% threshold met
+- [x] T021 Run linter (`npm run lint:fix`) and fix any issues
+- [x] T022 Run TypeScript compilation (`npm run compile`) and verify zero type errors
+- [x] T023 Run build (`npm run build`) and verify clean output
+- [x] T024 Verify CLI smoke test: `node dist/index.js --help` runs without error
 
 ---
 

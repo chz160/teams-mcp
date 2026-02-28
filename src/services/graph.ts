@@ -1,42 +1,10 @@
 import { type AccountInfo, PublicClientApplication } from "@azure/msal-node";
 import { Client } from "@microsoft/microsoft-graph-client";
 import { cachePlugin } from "../msal-cache.js";
+import { getDelegatedScopes, isReadOnlyMode } from "../utils/permissions.js";
 
 const CLIENT_ID = "14d82eec-204b-4c2f-b7e8-296a70dab67e";
 const AUTHORITY = "https://login.microsoftonline.com/common";
-
-// Read-only mode detection from environment variable
-function isReadOnlyMode(): boolean {
-  const value = process.env.TEAMS_MCP_READ_ONLY?.toLowerCase()?.trim();
-  return value === "true" || value === "1" || value === "yes";
-}
-
-const FULL_ACCESS_SCOPES = [
-  "User.Read",
-  "User.ReadBasic.All",
-  "Team.ReadBasic.All",
-  "Channel.ReadBasic.All",
-  "ChannelMessage.Read.All",
-  "ChannelMessage.Send",
-  "TeamMember.Read.All",
-  "Chat.ReadBasic",
-  "Chat.ReadWrite",
-];
-
-const READ_ONLY_SCOPES = [
-  "User.Read",
-  "User.ReadBasic.All",
-  "Team.ReadBasic.All",
-  "Channel.ReadBasic.All",
-  "ChannelMessage.Read.All",
-  "TeamMember.Read.All",
-  "Chat.ReadBasic",
-  "Chat.Read",
-];
-
-function getDelegatedScopes(readOnly: boolean): string[] {
-  return readOnly ? READ_ONLY_SCOPES : FULL_ACCESS_SCOPES;
-}
 
 export interface AuthStatus {
   isAuthenticated: boolean;

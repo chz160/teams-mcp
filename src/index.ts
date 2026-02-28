@@ -17,46 +17,13 @@ import { registerChatTools } from "./tools/chats.js";
 import { registerSearchTools } from "./tools/search.js";
 import { registerTeamsTools } from "./tools/teams.js";
 import { registerUsersTools } from "./tools/users.js";
+import { getDelegatedScopes, isReadOnlyMode } from "./utils/permissions.js";
 
 // Microsoft Graph CLI app ID (default public client)
 const CLIENT_ID = "14d82eec-204b-4c2f-b7e8-296a70dab67e";
 const AUTHORITY = "https://login.microsoftonline.com/common";
 
 const AUTH_INFO_PATH = join(homedir(), ".msgraph-mcp-auth.json");
-
-// Read-only mode detection from environment variable
-function isReadOnlyMode(): boolean {
-  const value = process.env.TEAMS_MCP_READ_ONLY?.toLowerCase()?.trim();
-  return value === "true" || value === "1" || value === "yes";
-}
-
-// Scopes for delegated (user) authentication, adjusted based on mode
-const FULL_ACCESS_SCOPES = [
-  "User.Read",
-  "User.ReadBasic.All",
-  "Team.ReadBasic.All",
-  "Channel.ReadBasic.All",
-  "ChannelMessage.Read.All",
-  "ChannelMessage.Send",
-  "TeamMember.Read.All",
-  "Chat.ReadBasic",
-  "Chat.ReadWrite",
-];
-
-const READ_ONLY_SCOPES = [
-  "User.Read",
-  "User.ReadBasic.All",
-  "Team.ReadBasic.All",
-  "Channel.ReadBasic.All",
-  "ChannelMessage.Read.All",
-  "TeamMember.Read.All",
-  "Chat.ReadBasic",
-  "Chat.Read",
-];
-
-function getDelegatedScopes(readOnly: boolean): string[] {
-  return readOnly ? READ_ONLY_SCOPES : FULL_ACCESS_SCOPES;
-}
 
 // Authentication functions
 async function authenticate() {

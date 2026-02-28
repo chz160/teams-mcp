@@ -40,7 +40,7 @@ describe("Teams Tools", () => {
     it("should register all teams tools when readOnly is false (backward compatibility)", () => {
       registerTeamsTools(mockServer, mockGraphService, false);
 
-      expect(mockServer.tool).toHaveBeenCalledTimes(9);
+      expect(mockServer.tool).toHaveBeenCalledTimes(11);
       const toolNames = mockServer.getAllTools();
       expect(toolNames).toContain("list_teams");
       expect(toolNames).toContain("list_channels");
@@ -51,6 +51,8 @@ describe("Teams Tools", () => {
       expect(toolNames).toContain("list_team_members");
       expect(toolNames).toContain("search_users_for_mentions");
       expect(toolNames).toContain("download_message_hosted_content");
+      expect(toolNames).toContain("update_channel_message");
+      expect(toolNames).toContain("delete_channel_message");
     });
 
     it("should register only read tools when readOnly is true", () => {
@@ -67,6 +69,8 @@ describe("Teams Tools", () => {
       expect(toolNames).toContain("download_message_hosted_content");
       expect(toolNames).not.toContain("send_channel_message");
       expect(toolNames).not.toContain("reply_to_channel_message");
+      expect(toolNames).not.toContain("update_channel_message");
+      expect(toolNames).not.toContain("delete_channel_message");
     });
   });
 

@@ -1,9 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-// We need to test the isReadOnlyMode() and getDelegatedScopes() functions.
-// Since they are module-private in index.ts and graph.ts, we test their behavior
-// indirectly through the public API, and also directly by importing the module
-// and checking environment-driven behavior.
+import { getDelegatedScopes, isReadOnlyMode } from "../../utils/permissions.js";
 
 describe("Read-Only Mode", () => {
   const originalEnv = process.env.TEAMS_MCP_READ_ONLY;
@@ -43,12 +39,6 @@ describe("Read-Only Mode", () => {
 
   describe("Environment variable parsing", () => {
     // Test the truthy/falsy parsing logic that isReadOnlyMode() implements
-    // by checking the helper function behavior
-
-    function isReadOnlyMode(): boolean {
-      const value = process.env.TEAMS_MCP_READ_ONLY?.toLowerCase()?.trim();
-      return value === "true" || value === "1" || value === "yes";
-    }
 
     it('should return true for "true"', () => {
       process.env.TEAMS_MCP_READ_ONLY = "true";
@@ -122,33 +112,6 @@ describe("Read-Only Mode", () => {
   });
 
   describe("getDelegatedScopes", () => {
-    function getDelegatedScopes(readOnly: boolean): string[] {
-      const FULL_ACCESS_SCOPES = [
-        "User.Read",
-        "User.ReadBasic.All",
-        "Team.ReadBasic.All",
-        "Channel.ReadBasic.All",
-        "ChannelMessage.Read.All",
-        "ChannelMessage.Send",
-        "TeamMember.Read.All",
-        "Chat.ReadBasic",
-        "Chat.ReadWrite",
-      ];
-
-      const READ_ONLY_SCOPES = [
-        "User.Read",
-        "User.ReadBasic.All",
-        "Team.ReadBasic.All",
-        "Channel.ReadBasic.All",
-        "ChannelMessage.Read.All",
-        "TeamMember.Read.All",
-        "Chat.ReadBasic",
-        "Chat.Read",
-      ];
-
-      return readOnly ? READ_ONLY_SCOPES : FULL_ACCESS_SCOPES;
-    }
-
     it("should return full-access scopes when readOnly is false", () => {
       const scopes = getDelegatedScopes(false);
       expect(scopes).toContain("ChannelMessage.Send");
